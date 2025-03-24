@@ -34,42 +34,51 @@ const dashboardController = {
     },
 
     getLeadExpenses: async (req, res) => {
-        const leadId = req.params.id;
-        const response = await authUtils.authenticatedFetch(
-            req,
-            res,
-            `/api/leads/${leadId}/expenses`
-        );
+        const leadId = req.query.leadId; // Changed to query param
+        const url = leadId ? `/api/leads/${leadId}/expenses` : "/api/expenses";
+        const response = await authUtils.authenticatedFetch(req, res, url);
         if (!response) return;
-        const leadExpenses = await response.json();
+        const data = await response.json();
+        const leadExpenses = leadId
+            ? data
+            : { lead: { name: "All Leads" }, expenses: data.leadExpenses };
         res.render("leadExpenses", { leadExpenses, leadId });
     },
 
     getTicketExpenses: async (req, res) => {
-        const ticketId = req.params.id;
-        const response = await authUtils.authenticatedFetch(
-            req,
-            res,
-            `/api/tickets/${ticketId}/expenses`
-        );
+        const ticketId = req.query.ticketId; // Changed to query param
+        const url = ticketId
+            ? `/api/tickets/${ticketId}/expenses`
+            : "/api/expenses";
+        const response = await authUtils.authenticatedFetch(req, res, url);
         if (!response) return;
-        const ticketExpenses = await response.json();
+        const data = await response.json();
+        const ticketExpenses = ticketId
+            ? data
+            : {
+                  ticket: { subject: "All Tickets" },
+                  expenses: data.ticketExpenses,
+              };
         res.render("ticketExpenses", { ticketExpenses, ticketId });
     },
 
     getClientBudgets: async (req, res) => {
-        const clientId = req.params.id;
-        const response = await authUtils.authenticatedFetch(
-            req,
-            res,
-            `/api/clients/${clientId}/budget`
-        );
+        const clientId = req.query.clientId; // Changed to query param
+        const url = clientId
+            ? `/api/clients/${clientId}/budget`
+            : "/api/customers";
+        const response = await authUtils.authenticatedFetch(req, res, url);
         if (!response) return;
-        const clientBudgets = await response.json();
+        const data = await response.json();
+        const clientBudgets = clientId
+            ? data
+            : {
+                  customer: { name: "All Clients" },
+                  budgets: data.customers.flatMap((c) => c.budgets),
+              };
         res.render("clientBudgets", { clientBudgets, clientId });
     },
 
-    // Update and Delete Lead Expense
     updateLeadExpense: async (req, res) => {
         const { leadId, expenseId } = req.params;
         const { amount, description, expenseDate } = req.body;
@@ -87,7 +96,7 @@ const dashboardController = {
             }
         );
         if (!response) return;
-        res.redirect(`/leads/${leadId}/expenses`);
+        res.redirect(`/leads/expenses${leadId ? `?leadId=${leadId}` : ""}`);
     },
     deleteLeadExpense: async (req, res) => {
         const { leadId, expenseId } = req.params;
@@ -100,10 +109,9 @@ const dashboardController = {
             }
         );
         if (!response) return;
-        res.redirect(`/leads/${leadId}/expenses`);
+        res.redirect(`/leads/expenses${leadId ? `?leadId=${leadId}` : ""}`);
     },
 
-    // Update and Delete Ticket Expense
     updateTicketExpense: async (req, res) => {
         const { ticketId, expenseId } = req.params;
         const { amount, description, expenseDate } = req.body;
@@ -121,7 +129,9 @@ const dashboardController = {
             }
         );
         if (!response) return;
-        res.redirect(`/tickets/${ticketId}/expenses`);
+        res.redirect(
+            `/tickets/expenses${ticketId ? `?ticketId=${ticketId}` : ""}`
+        );
     },
     deleteTicketExpense: async (req, res) => {
         const { ticketId, expenseId } = req.params;
@@ -134,10 +144,11 @@ const dashboardController = {
             }
         );
         if (!response) return;
-        res.redirect(`/tickets/${ticketId}/expenses`);
+        res.redirect(
+            `/tickets/expenses${ticketId ? `?ticketId=${ticketId}` : ""}`
+        );
     },
 
-    // Update and Delete Client Budget
     updateClientBudget: async (req, res) => {
         const { clientId, budgetId } = req.params;
         const { amount, description } = req.body;
@@ -154,7 +165,9 @@ const dashboardController = {
             }
         );
         if (!response) return;
-        res.redirect(`/clients/${clientId}/budget`);
+        res.redirect(
+            `/clients/budget${clientId ? `?clientId=${clientId}` : ""}`
+        );
     },
     deleteClientBudget: async (req, res) => {
         const { clientId, budgetId } = req.params;
@@ -167,7 +180,9 @@ const dashboardController = {
             }
         );
         if (!response) return;
-        res.redirect(`/clients/${clientId}/budget`);
+        res.redirect(
+            `/clients/budget${clientId ? `?clientId=${clientId}` : ""}`
+        );
     },
 };
 
