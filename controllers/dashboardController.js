@@ -22,19 +22,14 @@ const dashboardController = {
     },
 
     getLeadExpenses: async (req, res) => {
-        const leadId = req.query.leadId; // Changed to query param
-        const url = leadId ? `/api/leads/${leadId}/expenses` : "/api/expenses";
-        const response = await authUtils.authenticatedFetch(req, res, url);
-        if (!response) return;
-        const data = await response;
-        const leadExpenses = leadId
-            ? data
-            : { lead: { name: "All Leads" }, expenses: data.leadExpenses };
-        res.render("leadExpenses", { leadExpenses, leadId });
+        const url = "/api/leads/expenses";
+        const expenses = await authUtils.authenticatedFetch(req, res, url);
+        
+        res.render("leadExpenses", { expenses });
     },
 
     getTicketExpenses: async (req, res) => {
-        const url = "/api/tickets";
+        const url = "/api/tickets/expenses";
         const expenses = await authUtils.authenticatedFetch(req, res, url);
         
         res.render("ticketExpenses", { expenses });
