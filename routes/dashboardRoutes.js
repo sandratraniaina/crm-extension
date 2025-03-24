@@ -10,19 +10,19 @@ router.get(
     dashboardController.getDashboard
 );
 
-// Detailed views
+// Detailed views (updated to use query params)
 router.get(
-    "/leads/:id/expenses",
+    "/leads/expenses",
     authMiddleware.isAuthenticated,
     dashboardController.getLeadExpenses
 );
 router.get(
-    "/tickets/:id/expenses",
+    "/tickets/expenses",
     authMiddleware.isAuthenticated,
     dashboardController.getTicketExpenses
 );
 router.get(
-    "/clients/:id/budget",
+    "/clients/budget",
     authMiddleware.isAuthenticated,
     dashboardController.getClientBudgets
 );
@@ -38,7 +38,6 @@ router.post(
     authMiddleware.isAuthenticated,
     dashboardController.deleteLeadExpense
 );
-
 router.post(
     "/tickets/:ticketId/expenses/:expenseId/update",
     authMiddleware.isAuthenticated,
@@ -49,7 +48,6 @@ router.post(
     authMiddleware.isAuthenticated,
     dashboardController.deleteTicketExpense
 );
-
 router.post(
     "/clients/:clientId/budget/:budgetId/update",
     authMiddleware.isAuthenticated,
