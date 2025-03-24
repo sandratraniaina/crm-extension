@@ -10,6 +10,5 @@ router.get("/login", authController.getLogin);
 router.post("/login", authController.postLogin);
 
 // Dashboard (protected route)
-router.get("/", authMiddleware.isAuthenticated, authController.getDashboard);
 
 module.exports = router;
