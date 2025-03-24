@@ -51,20 +51,11 @@ const dashboardController = {
     },
 
     getClientBudgets: async (req, res) => {
-        const clientId = req.query.clientId; // Changed to query param
-        const url = clientId
-            ? `/api/clients/${clientId}/budget`
-            : "/api/customers";
+        const url = "/api/customers/budgets"
         const response = await authUtils.authenticatedFetch(req, res, url);
         if (!response) return;
-        const data = await response;
-        const clientBudgets = clientId
-            ? data
-            : {
-                  customer: { name: "All Clients" },
-                  budgets: data.customers.flatMap((c) => c.budgets),
-              };
-        res.render("clientBudgets", { clientBudgets, clientId });
+
+        res.render("clientBudgets", { "budgets": response });
     },
 
     updateLeadExpense: async (req, res) => {
