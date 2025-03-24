@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Extension - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Dashboard</h1>
+        <!-- Graph 1: Lead Expenses -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Lead Expenses</h2>
+            <canvas id="leadExpensesChart" width="400" height="200"></canvas>
+            <p class="mt-4 text-gray-600">Total Lead Expenses: $<%= leadsData.leads.reduce((sum, lead)=> sum +
+                    lead.totalExpense, 0) %></p>
+            <% leadsData.leads.forEach(lead=> { %>
+                <a href="/leads/<%= lead.leadId %>/expenses" class="text-blue-600 hover:underline">
+                    <%= lead.name %>: $<%= lead.totalExpense %>
+                </a><br>
+                <% }) %>
+        </div>
+
+        <!-- Graph 2: Ticket Expenses -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Ticket Expenses</h2>
+            <canvas id="ticketExpensesChart" width="400" height="200"></canvas>
+            <p class="mt-4 text-gray-600">Total Ticket Expenses: $<%= expensesData.ticketExpenses.reduce((sum, exp)=>
+                    sum + exp.amount, 0) %></p>
+            <% expensesData.ticketExpenses.forEach(exp=> { %>
+                <a href="/tickets/<%= exp.ticketId %>/expenses" class="text-blue-600 hover:underline">Ticket <%=
+                        exp.ticketId %>: $<%= exp.amount %></a><br>
+                <% }) %>
+        </div>
+
+        <!-- Graph 3: Client Budget -->
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4">Client Budget</h2>
+            <canvas id="clientBudgetChart" width="400" height="200"></canvas>
+            <p class="mt-4 text-gray-600">Total Budget: $<%= customersData.customers.reduce((sum, cust)=> sum +
+                    cust.totalBudget, 0) %></p>
+            <% customersData.customers.forEach(customer=> { %>
+                <a href="/clients/<%= customer.customerId %>/budget" class="text-blue-600 hover:underline">
+                    <%= customer.name %>: $<%= customer.totalBudget %>
+                </a><br>
+                <% }) %>
+        </div>
+    </div>
+    <script>    
+        const leadLabels = <%- JSON.stringify(leadsData.leads.map(lead => lead.name)) %>;
+        const ticketLabels = <%- JSON.stringify(expensesData.ticketExpenses.map(exp => `Ticket ${exp.ticketId}`)) %>;
+        const clientBudgetLabels = <%- JSON.stringify(customersData.customers.map(cust => cust.name)) %>;
+
+        console.log(leadLabels);
+        // Lead Expenses Chart
+        const leadCtx = document.getElementById('leadExpensesChart').getContext('2d');
+        new Chart(leadCtx, {
+            type: 'bar',
+            data: {
+                labels: leadLabels,
+                datasets: [{
+                    label: 'Lead Expenses ($)',
+                    data: <%= JSON.stringify(leadsData.leads.map(lead => lead.totalExpense)) %>,
+                    backgroundColor: 'rgba(37, 99, 235, 0.6)',
+                    borderColor: 'rgba(37, 99, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+
+        // Ticket Expenses Chart
+        const ticketCtx = document.getElementById('ticketExpensesChart').getContext('2d');
+        new Chart(ticketCtx, {
+            type: 'bar',
+            data: {
+                labels: ticketLabels,
+                datasets: [{
+                    label: 'Ticket Expenses ($)',
+                    data: <%= JSON.stringify(expensesData.ticketExpenses.map(exp => exp.amount)) %>,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+
+        // Client Budget Chart
+        const clientCtx = document.getElementById('clientBudgetChart').getContext('2d');
+        new Chart(clientCtx, {
+            type: 'bar',
+            data: {
+                labels:clientBudgetLabels,
+                datasets: [{
+                    label: 'Client Budget ($)',
+                    data: <%= JSON.stringify(customersData.customers.map(cust => cust.totalBudget)) %>,
+                    backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+    </script>
+</body>
+
+</html>
