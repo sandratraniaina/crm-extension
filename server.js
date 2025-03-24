@@ -1,16 +1,26 @@
-const express = require('express');
-const path = require('path');
+const express = require("express");
+const session = require("express-session");
+const authRoutes = require("./routes/authRoutes");
+
 const app = express();
+const port = 3000;
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
+// Middleware
+app.set("view engine", "ejs");
+app.use(express.urlencoded({ extended: true }));
+app.use(
+    session({
+        secret: "your-secret-key", // Replace with a secure key in production
+        resave: false,
+        saveUninitialized: false,
+        cookie: { secure: false }, // Set to true in production with HTTPS
+    })
+);
 
-app.get('/', (req, res) => {
-    res.render('index');
-});
+// Routes
+app.use("/", authRoutes);
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
+// Start server
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
 });
