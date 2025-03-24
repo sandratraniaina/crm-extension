@@ -22,7 +22,7 @@ router.get(
     dashboardController.getTicketExpenses
 );
 router.get(
-    "/clients/budget",
+    "/clients/budgets",
     authMiddleware.isAuthenticated,
     dashboardController.getClientBudgets
 );

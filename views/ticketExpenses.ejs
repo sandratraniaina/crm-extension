@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <%= ticketExpenses.ticket.subject %> Expenses
+        Tickets Expenses
     </title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
     <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Expenses for <%= ticketExpenses.ticket.subject %>
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Expenses for all tickets
         </h1>
         <table class="w-full bg-white rounded-lg shadow-lg">
             <thead>
@@ -21,12 +21,12 @@
                     <th class="p-3 text-left">Amount ($)</th>
                     <th class="p-3 text-left">Description</th>
                     <th class="p-3 text-left">Date</th>
-                    <th class="p-3 text-left">Ticket ID</th>
+                    <th class="p-3 text-left">Description</th>
                     <th class="p-3 text-left">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <% ticketExpenses.expenses.forEach(exp=> { %>
+                <% expenses.forEach(exp=> { %>
                     <tr id="row-<%= exp.id %>">
                         <td class="p-3">
                             <%= exp.id %>
@@ -41,12 +41,12 @@
                             <%= exp.expenseDate %>
                         </td>
                         <td class="p-3">
-                            <%= exp.ticketId || (ticketId || 'Multiple' ) %>
+                            <%= exp.description %>
                         </td>
                         <td class="p-3">
                             <button onclick="toggleEditForm('form-<%= exp.id %>', 'row-<%= exp.id %>')"
                                 class="text-blue-600 hover:underline">Edit</button>
-                            <form action="/tickets/<%= exp.ticketId || ticketId %>/expenses/<%= exp.id %>/delete"
+                            <form action="/tickets/<%= exp.ticket.ticketId %>/expenses/<%= exp.id %>/delete"
                                 method="POST" class="inline">
                                 <button type="submit" class="text-red-600 hover:underline">Delete</button>
                             </form>
@@ -54,7 +54,7 @@
                     </tr>
                     <tr id="form-<%= exp.id %>" class="hidden">
                         <td colspan="6" class="p-3">
-                            <form action="/tickets/<%= exp.ticketId || ticketId %>/expenses/<%= exp.id %>/update"
+                            <form action="/tickets/<%= exp.ticket.ticketId %>/expenses/<%= exp.id %>/update"
                                 method="POST" class="space-y-4">
                                 <div>
                                     <label for="amount-<%= exp.id %>" class="block text-gray-700">Amount ($)</label>

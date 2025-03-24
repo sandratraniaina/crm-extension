@@ -9,9 +9,10 @@ const expenseThresholdController = {
                 "/api/expense-threshold"
             );
             if (!response) return;
-            const thresholdData = await response.json();
+            const thresholdData = await response;
+            console.log(thresholdData);
             res.render("expenseThreshold", {
-                threshold: thresholdData.threshold,
+                threshold: thresholdData.threshold.value,
             });
         } catch (error) {
             console.error("Threshold error:", error);
@@ -26,7 +27,7 @@ const expenseThresholdController = {
             "/api/expense-threshold/update",
             {
                 method: "POST",
-                body: JSON.stringify({ threshold: parseFloat(value) }),
+                body: JSON.stringify({ threshold: parseFloat(value / 100) }),
             }
         );
         if (!response) return;

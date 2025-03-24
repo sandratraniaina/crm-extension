@@ -3,30 +3,18 @@ const authUtils = require("../utils/api");
 const dashboardController = {
     getDashboard: async (req, res) => {
         try {
-            const expensesResponse = await authUtils.authenticatedFetch(
+            const financialSummary = await authUtils.authenticatedFetch(
                 req,
                 res,
-                "/api/expenses"
+                "/api/summary/financial-summary"
             );
-            if (!expensesResponse) return;
-            const leadsResponse = await authUtils.authenticatedFetch(
-                req,
+            const summaries = await authUtils.authenticatedFetch(
+                req, 
                 res,
-                "/api/leads"
-            );
-            if (!leadsResponse) return;
-            const customersResponse = await authUtils.authenticatedFetch(
-                req,
-                res,
-                "/api/customers"
-            );
-            if (!customersResponse) return;
+                "/api/summary/customer-financial-summary"
+            )
 
-            const expensesData = await expensesResponse.json();
-            const leadsData = await leadsResponse.json();
-            const customersData = await customersResponse.json();
-
-            res.render("dashboard", { expensesData, leadsData, customersData });
+            res.render("dashboard", { financialSummary, summaries });
         } catch (error) {
             console.error("Dashboard error:", error);
             res.status(500).send("Internal Server Error");
@@ -34,49 +22,25 @@ const dashboardController = {
     },
 
     getLeadExpenses: async (req, res) => {
-        const leadId = req.query.leadId; // Changed to query param
-        const url = leadId ? `/api/leads/${leadId}/expenses` : "/api/expenses";
-        const response = await authUtils.authenticatedFetch(req, res, url);
-        if (!response) return;
-        const data = await response.json();
-        const leadExpenses = leadId
-            ? data
-            : { lead: { name: "All Leads" }, expenses: data.leadExpenses };
-        res.render("leadExpenses", { leadExpenses, leadId });
+        const url = "/api/leads/expenses";
+        const expenses = await authUtils.authenticatedFetch(req, res, url);
+        
+        res.render("leadExpenses", { expenses });
     },
 
     getTicketExpenses: async (req, res) => {
-        const ticketId = req.query.ticketId; // Changed to query param
-        const url = ticketId
-            ? `/api/tickets/${ticketId}/expenses`
-            : "/api/expenses";
-        const response = await authUtils.authenticatedFetch(req, res, url);
-        if (!response) return;
-        const data = await response.json();
-        const ticketExpenses = ticketId
-            ? data
-            : {
-                  ticket: { subject: "All Tickets" },
-                  expenses: data.ticketExpenses,
-              };
-        res.render("ticketExpenses", { ticketExpenses, ticketId });
+        const url = "/api/tickets/expenses";
+        const expenses = await authUtils.authenticatedFetch(req, res, url);
+        
+        res.render("ticketExpenses", { expenses });
     },
 
     getClientBudgets: async (req, res) => {
-        const clientId = req.query.clientId; // Changed to query param
-        const url = clientId
-            ? `/api/clients/${clientId}/budget`
-            : "/api/customers";
+        const url = "/api/customers/budgets"
         const response = await authUtils.authenticatedFetch(req, res, url);
         if (!response) return;
-        const data = await response.json();
-        const clientBudgets = clientId
-            ? data
-            : {
-                  customer: { name: "All Clients" },
-                  budgets: data.customers.flatMap((c) => c.budgets),
-              };
-        res.render("clientBudgets", { clientBudgets, clientId });
+
+        res.render("clientBudgets", { "budgets": response });
     },
 
     updateLeadExpense: async (req, res) => {
