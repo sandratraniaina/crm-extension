@@ -161,7 +161,8 @@ const authUtils = {
                         createdAt: "2025-03-01",
                     },
                 ],
-            },
+            },  
+            '/api/expense-threshold': { threshold: 0.8 }
         };
 
         const mockResponse = {
