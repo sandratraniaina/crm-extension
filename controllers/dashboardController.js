@@ -34,20 +34,10 @@ const dashboardController = {
     },
 
     getTicketExpenses: async (req, res) => {
-        const ticketId = req.query.ticketId; // Changed to query param
-        const url = ticketId
-            ? `/api/tickets/${ticketId}/expenses`
-            : "/api/expenses";
-        const response = await authUtils.authenticatedFetch(req, res, url);
-        if (!response) return;
-        const data = await response;
-        const ticketExpenses = ticketId
-            ? data
-            : {
-                  ticket: { subject: "All Tickets" },
-                  expenses: data.ticketExpenses,
-              };
-        res.render("ticketExpenses", { ticketExpenses, ticketId });
+        const url = "/api/tickets";
+        const expenses = await authUtils.authenticatedFetch(req, res, url);
+        
+        res.render("ticketExpenses", { expenses });
     },
 
     getClientBudgets: async (req, res) => {
