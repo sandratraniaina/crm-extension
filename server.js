@@ -2,7 +2,9 @@ const express = require("express");
 const session = require("express-session");
 const authRoutes = require("./routes/authRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
-const expenseThresholdRoutes = require('./routes/expenseThresholdRoutes');
+const leadsRoutes = require("./routes/leadsRoutes");
+const ticketsRoutes = require("./routes/ticketsRoutes");
+const expenseThresholdRoutes = require("./routes/expenseThresholdRoutes");
 
 const app = express();
 const port = 3000;
@@ -20,7 +22,9 @@ app.use(
 
 app.use("/", authRoutes);
 app.use("/", dashboardRoutes);
-app.use('/', expenseThresholdRoutes);
+app.use("/", expenseThresholdRoutes);
+app.use("/", leadsRoutes);
+app.use("/", ticketsRoutes);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
