@@ -3,30 +3,18 @@ const authUtils = require("../utils/api");
 const dashboardController = {
     getDashboard: async (req, res) => {
         try {
-            const expensesResponse = await authUtils.authenticatedFetch(
+            const financialSummary = await authUtils.authenticatedFetch(
                 req,
                 res,
-                "/api/expenses"
+                "/api/summary/financial-summary"
             );
-            if (!expensesResponse) return;
-            const leadsResponse = await authUtils.authenticatedFetch(
-                req,
+            const summaries = await authUtils.authenticatedFetch(
+                req, 
                 res,
-                "/api/leads"
-            );
-            if (!leadsResponse) return;
-            const customersResponse = await authUtils.authenticatedFetch(
-                req,
-                res,
-                "/api/customers"
-            );
-            if (!customersResponse) return;
+                "/api/summary/customer-financial-summary"
+            )
 
-            const expensesData = await expensesResponse.json();
-            const leadsData = await leadsResponse.json();
-            const customersData = await customersResponse.json();
-
-            res.render("dashboard", { expensesData, leadsData, customersData });
+            res.render("dashboard", { financialSummary, summaries });
         } catch (error) {
             console.error("Dashboard error:", error);
             res.status(500).send("Internal Server Error");
@@ -38,7 +26,7 @@ const dashboardController = {
         const url = leadId ? `/api/leads/${leadId}/expenses` : "/api/expenses";
         const response = await authUtils.authenticatedFetch(req, res, url);
         if (!response) return;
-        const data = await response.json();
+        const data = await response;
         const leadExpenses = leadId
             ? data
             : { lead: { name: "All Leads" }, expenses: data.leadExpenses };
@@ -52,7 +40,7 @@ const dashboardController = {
             : "/api/expenses";
         const response = await authUtils.authenticatedFetch(req, res, url);
         if (!response) return;
-        const data = await response.json();
+        const data = await response;
         const ticketExpenses = ticketId
             ? data
             : {
@@ -69,7 +57,7 @@ const dashboardController = {
             : "/api/customers";
         const response = await authUtils.authenticatedFetch(req, res, url);
         if (!response) return;
-        const data = await response.json();
+        const data = await response;
         const clientBudgets = clientId
             ? data
             : {
