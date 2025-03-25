@@ -15,10 +15,14 @@
             <a href="/" class="text-2xl font-bold text-gray-800">CRM Extension</a>
         </div>
         <div class="flex items-center space-x-4">
-            <span class="text-gray-700 font-medium">
-                <i class="fas fa-user mr-2"></i>
-                Aina
-            </span>
+            <% if (session && session.user) { %>
+                <span class="text-gray-700 font-medium">
+                    <i class="fas fa-user mr-2"></i>
+                    <%= session.user.username %>
+                </span>
+                <% } else { %>
+                    <span class="text-gray-700 font-medium">Guest</span>
+                    <% } %>
         </div>
     </header>
 </body>
