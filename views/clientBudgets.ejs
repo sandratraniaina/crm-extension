@@ -4,49 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        Clients Budgets
-    </title>
+    <title>Clients Budgets</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
-<body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Budgets for all clients
-        </h1>
-        <table class="w-full bg-white rounded-lg shadow-lg">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="p-3 text-left">ID</th>
-                    <th class="p-3 text-left">Amount ($)</th>
-                    <th class="p-3 text-left">Description</th>
-                    <th class="p-3 text-left">Created At</th>
-                    <th class="p-3 text-left">Client Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% budgets.forEach(budget=> { %>
-                    <tr id="row-<%= budget.id %>">
-                        <td class="p-3">
-                            <%= budget.id %>
-                        </td>
-                        <td class="p-3">
-                            <%= budget.amount %>
-                        </td>
-                        <td class="p-3">
-                            <%= budget.description %>
-                        </td>
-                        <td class="p-3">
-                            <%= budget.createdAt %>
-                        </td>
-                        <td class="p-3">
-                            <%= budget.customer.name%>
-                        </td>
-                    </tr>
-                    <% }) %>
-            </tbody>
-        </table>
-        <a href="/" class="mt-4 inline-block text-blue-600 hover:underline">Back to Dashboard</a>
+<body class="bg-gray-50 min-h-screen flex">
+    <%- include('partials/sidebar') %>
+
+    <div class="flex-1 flex flex-col">
+        <%- include('partials/header') %>
+
+        <main class="flex-1 p-6 ml-64">
+            <h1 class="text-2xl font-semibold text-gray-900 mb-6">Budgets for All Clients</h1>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200">
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">ID</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Amount ($)</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Description</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Created At</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Client Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% budgets.forEach(budget => { %>
+                            <tr id="row-<%= budget.id %>" class="border-b border-gray-100 hover:bg-gray-50">
+                                <td class="p-3 text-sm text-gray-900"><%= budget.id %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= budget.amount %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= budget.description %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= budget.createdAt %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= budget.customer.name %></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </main>
     </div>
 </body>
 

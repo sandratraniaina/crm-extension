@@ -4,92 +4,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        Leads Expenses
-    </title>
+    <title>Leads Expenses</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
-<body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Expenses for leads
-        </h1>
-        <table class="w-full bg-white rounded-lg shadow-lg">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="p-3 text-left">ID</th>
-                    <th class="p-3 text-left">Amount ($)</th>
-                    <th class="p-3 text-left">Description</th>
-                    <th class="p-3 text-left">Date</th>
-                    <th class="p-3 text-left">Name</th>
-                    <th class="p-3 text-left">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% expenses.forEach(exp=> { %>
-                    <tr id="row-<%= exp.id %>">
-                        <td class="p-3">
-                            <%= exp.id %>
-                        </td>
-                        <td class="p-3">
-                            <%= exp.amount %>
-                        </td>
-                        <td class="p-3">
-                            <%= exp.description %>
-                        </td>
-                        <td class="p-3">
-                            <%= exp.expenseDate %>
-                        </td>
-                        <td class="p-3">
-                            <%= exp.lead.name %>
-                        </td>
-                        <td class="p-3">
-                            <button onclick="toggleEditForm('form-<%= exp.id %>', 'row-<%= exp.id %>')"
-                                class="text-blue-600 hover:underline">Edit</button>
-                            <form action="/leads/<%= exp.lead.leadId %>/expenses/<%= exp.id %>/delete"
-                                method="POST" class="inline">
-                                <button type="submit" class="text-red-600 hover:underline">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    <tr id="form-<%= exp.id %>" class="hidden">
-                        <td colspan="6" class="p-3">
-                            <form action="/leads/<%= exp.lead.leadId %>/expenses/<%= exp.id %>/update"
-                                method="POST" class="space-y-4">
-                                <div>
-                                    <label for="amount-<%= exp.id %>" class="block text-gray-700">Amount ($)</label>
-                                    <input type="number" step="0.01" id="amount-<%= exp.id %>" name="amount"
-                                        value="<%= exp.amount %>" class="w-full p-2 border border-gray-300 rounded-lg"
-                                        required>
-                                </div>
-                                <div>
-                                    <label for="description-<%= exp.id %>"
-                                        class="block text-gray-700">Description</label>
-                                    <input type="text" id="description-<%= exp.id %>" name="description"
-                                        value="<%= exp.description %>"
-                                        class="w-full p-2 border border-gray-300 rounded-lg">
-                                </div>
-                                <div>
-                                    <label for="expenseDate-<%= exp.id %>" class="block text-gray-700">Expense
-                                        Date</label>
-                                    <input type="date" id="expenseDate-<%= exp.id %>" name="expenseDate"
-                                        value="<%= exp.expenseDate %>"
-                                        class="w-full p-2 border border-gray-300 rounded-lg" required>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button type="submit"
-                                        class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700">Update</button>
-                                    <button type="button"
-                                        onclick="toggleEditForm('form-<%= exp.id %>', 'row-<%= exp.id %>')"
-                                        class="bg-gray-600 text-white p-2 rounded-lg hover:bg-gray-700">Cancel</button>
-                                </div>
-                            </form>
-                        </td>
-                    </tr>
-                    <% }) %>
-            </tbody>
-        </table>
-        <a href="/" class="mt-4 inline-block text-blue-600 hover:underline">Back to Dashboard</a>
+<body class="bg-gray-50 min-h-screen flex">
+    <%- include('partials/sidebar') %>
+
+    <div class="flex-1 flex flex-col">
+        <%- include('partials/header') %>
+
+        <main class="flex-1 p-6 ml-64">
+            <h1 class="text-2xl font-semibold text-gray-900 mb-6">Expenses for Leads</h1>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200">
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">ID</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Amount ($)</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Description</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Date</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Name</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% expenses.forEach(exp => { %>
+                            <tr id="row-<%= exp.id %>" class="border-b border-gray-100 hover:bg-gray-50">
+                                <td class="p-3 text-sm text-gray-900"><%= exp.id %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= exp.amount %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= exp.description %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= exp.expenseDate %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= exp.lead.name %></td>
+                                <td class="p-3">
+                                    <button onclick="toggleEditForm('form-<%= exp.id %>', 'row-<%= exp.id %>')"
+                                        class="text-blue-500 hover:text-blue-700 text-sm">Edit</button>
+                                    <form action="/leads/<%= exp.lead.leadId %>/expenses/<%= exp.id %>/delete"
+                                        method="POST" class="inline">
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <tr id="form-<%= exp.id %>" class="hidden">
+                                <td colspan="6" class="p-3">
+                                    <form action="/leads/<%= exp.lead.leadId %>/expenses/<%= exp.id %>/update"
+                                        method="POST" class="space-y-4">
+                                        <div>
+                                            <label for="amount-<%= exp.id %>" class="block text-sm text-gray-600">Amount ($)</label>
+                                            <input type="number" step="0.01" id="amount-<%= exp.id %>" name="amount"
+                                                value="<%= exp.amount %>" class="w-full p-2 border border-gray-200 rounded-lg text-sm"
+                                                required>
+                                        </div>
+                                        <div>
+                                            <label for="description-<%= exp.id %>" class="block text-sm text-gray-600">Description</label>
+                                            <input type="text" id="description-<%= exp.id %>" name="description"
+                                                value="<%= exp.description %>"
+                                                class="w-full p-2 border border-gray-200 rounded-lg text-sm">
+                                        </div>
+                                        <div>
+                                            <label for="expenseDate-<%= exp.id %>" class="block text-sm text-gray-600">Expense Date</label>
+                                            <input type="date" id="expenseDate-<%= exp.id %>" name="expenseDate"
+                                                value="<%= exp.expenseDate %>"
+                                                class="w-full p-2 border border-gray-200 rounded-lg text-sm" required>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button type="submit"
+                                                class="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 text-sm">Update</button>
+                                            <button type="button"
+                                                onclick="toggleEditForm('form-<%= exp.id %>', 'row-<%= exp.id %>')"
+                                                class="bg-gray-500 text-white p-2 rounded-lg hover:bg-gray-600 text-sm">Cancel</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </main>
     </div>
 
     <script>

@@ -6,54 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Leads</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
-<body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto p-6">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">All Leads</h1>
-        <table class="w-full bg-white rounded-lg shadow-lg">
-            <thead>
-                <tr class="bg-gray-200">
-                    <th class="p-3 text-left">ID</th>
-                    <th class="p-3 text-left">Name</th>
-                    <th class="p-3 text-left">Status</th>
-                    <th class="p-3 text-left">Phone</th>
-                    <th class="p-3 text-left">Created At</th>
-                    <th class="p-3 text-left">Total Expense ($)</th>
-                    <th class="p-3 text-left">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% leads.forEach(lead=> { %>
-                    <tr id="row-<%= lead.leadId %>">
-                        <td class="p-3">
-                            <%= lead.leadId %>
-                        </td>
-                        <td class="p-3">
-                            <%= lead.name %>
-                        </td>
-                        <td class="p-3">
-                            <%= lead.status %>
-                        </td>
-                        <td class="p-3">
-                            <%= lead.phone %>
-                        </td>
-                        <td class="p-3">
-                            <%= lead.createdAt %>
-                        </td>
-                        <td class="p-3">
-                            <%= lead.totalExpense.toFixed(2) %>
-                        </td>
-                        <td class="p-3">
-                            <form action="/leads/<%= lead.leadId %>/delete" method="POST" class="inline">
-                                <button type="submit" class="text-red-600 hover:underline">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    <% }) %>
-            </tbody>
-        </table>
-        <a href="/" class="mt-4 inline-block text-blue-600 hover:underline">Back to Dashboard</a>
+<body class="bg-gray-50 min-h-screen flex">
+    <%- include('partials/sidebar') %>
+
+    <div class="flex-1 flex flex-col">
+        <%- include('partials/header') %>
+
+        <main class="flex-1 p-6 ml-64">
+            <h1 class="text-2xl font-semibold text-gray-900 mb-6">All Leads</h1>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200">
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">ID</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Name</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Status</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Phone</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Created At</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Total Expense ($)</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% leads.forEach(lead => { %>
+                            <tr id="row-<%= lead.leadId %>" class="border-b border-gray-100 hover:bg-gray-50">
+                                <td class="p-3 text-sm text-gray-900"><%= lead.leadId %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= lead.name %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= lead.status %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= lead.phone %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= lead.createdAt %></td>
+                                <td class="p-3 text-sm text-gray-900"><%= lead.totalExpense.toFixed(2) %></td>
+                                <td class="p-3">
+                                    <form action="/leads/<%= lead.leadId %>/delete" method="POST" class="inline">
+                                        <button type="submit" class="text-red-500 hover:text-red-700 text-sm">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </main>
     </div>
 </body>
 
