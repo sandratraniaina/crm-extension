@@ -5,12 +5,12 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 // Leads routes
 router.get(
-    "/leads",
+    "",
     authMiddleware.isAuthenticated,
     leadsController.getAllLeads
 );
 router.post(
-    "/leads/:leadId/delete",
+    "/:leadId/delete",
     authMiddleware.isAuthenticated,
     leadsController.deleteLead
 );

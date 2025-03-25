@@ -26,13 +26,16 @@ app.use(
 
 app.use("/", authRoutes);
 app.use("/", dashboardRoutes);
-app.use("/", expenseThresholdRoutes);
-app.use("/", leadsRoutes);
-app.use("/", ticketsRoutes);
 
-app.use("/leads", leadExpenseRoutes);
-app.use("/tickets", ticketExpenseRoutes);
 app.use("/customers", customerBudgetRoutes);
+
+app.use("/expense-threshold", expenseThresholdRoutes);
+
+app.use("/tickets", ticketsRoutes);
+app.use("/tickets", ticketExpenseRoutes);
+
+app.use("/leads", leadsRoutes);
+app.use("/leads", leadExpenseRoutes);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
