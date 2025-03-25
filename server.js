@@ -25,10 +25,15 @@ app.use(
         cookie: {
             maxAge: 120000,
             secure: false,
-            httpOnly: true
+            httpOnly: true,
         },
     })
 );
+
+app.use((req, res, next) => {
+    res.locals.session = req.session; // Make session data available in EJS
+    next();
+});
 
 app.use("/", authRoutes);
 app.use("/", dashboardRoutes);
