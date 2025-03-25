@@ -5,12 +5,12 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 // Tickets routes
 router.get(
-    "/tickets",
+    "",
     authMiddleware.isAuthenticated,
     ticketsController.getAllTickets
 );
 router.post(
-    "/tickets/:ticketId/delete",
+    "/:ticketId/delete",
     authMiddleware.isAuthenticated,
     ticketsController.deleteTicket
 );

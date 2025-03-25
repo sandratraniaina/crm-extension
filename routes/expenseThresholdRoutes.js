@@ -4,7 +4,7 @@ const expenseThresholdController = require('../controllers/expenseThresholdContr
 const authMiddleware = require('../middleware/authMiddleware');
 
 // Expense Threshold routes
-router.get('/expense-threshold', authMiddleware.isAuthenticated, expenseThresholdController.getExpenseThreshold);
-router.post('/expense-threshold', authMiddleware.isAuthenticated, expenseThresholdController.updateExpenseThreshold);
+router.get('', authMiddleware.isAuthenticated, expenseThresholdController.getExpenseThreshold);
+router.post('', authMiddleware.isAuthenticated, expenseThresholdController.updateExpenseThreshold);
 
 module.exports = router;
