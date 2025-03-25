@@ -6,7 +6,7 @@ const authUtils = {
             return null;
         }
 
-        const baseUrl = "http://localhost:8080";
+        const baseUrl = process.env.API_HOST;
         const fullUrl = `${baseUrl}${url}`;
         const headers = {
             // Authorization: `Bearer ${token}`,
