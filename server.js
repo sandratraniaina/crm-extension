@@ -10,7 +10,7 @@ const leadExpenseRoutes = require("./routes/leadExpenseRoutes");
 const ticketExpenseRoutes = require("./routes/ticketExpenseRoutes");
 const customerBudgetRoutes = require("./routes/customerBudgetRoutes");
 
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
 const port = 3000;
@@ -19,10 +19,14 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(
     session({
-        secret: "your-secret-key",
+        secret: process.env.SESSION_SECRET_KEY,
         resave: false,
         saveUninitialized: false,
-        cookie: { secure: false },
+        cookie: {
+            maxAge: 120000,
+            secure: false,
+            httpOnly: true
+        },
     })
 );
 
