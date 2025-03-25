@@ -10,6 +10,8 @@ const leadExpenseRoutes = require("./routes/leadExpenseRoutes");
 const ticketExpenseRoutes = require("./routes/ticketExpenseRoutes");
 const customerBudgetRoutes = require("./routes/customerBudgetRoutes");
 
+require('dotenv').config();
+
 const app = express();
 const port = 3000;
 
