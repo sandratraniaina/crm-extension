@@ -9,7 +9,7 @@ const authUtils = {
         const baseUrl = process.env.API_HOST;
         const fullUrl = `${baseUrl}${url}`;
         const headers = {
-            // Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
         };
 
