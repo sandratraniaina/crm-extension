@@ -11,11 +11,7 @@ router.get(
 );
 
 // Detailed views (updated to use query params)
-router.get(
-    "/leads/expenses",
-    authMiddleware.isAuthenticated,
-    dashboardController.getLeadExpenses
-);
+
 router.get(
     "/tickets/expenses",
     authMiddleware.isAuthenticated,
@@ -28,16 +24,6 @@ router.get(
 );
 
 // Update and Delete routes
-router.post(
-    "/leads/:leadId/expenses/:expenseId/update",
-    authMiddleware.isAuthenticated,
-    dashboardController.updateLeadExpense
-);
-router.post(
-    "/leads/:leadId/expenses/:expenseId/delete",
-    authMiddleware.isAuthenticated,
-    dashboardController.deleteLeadExpense
-);
 router.post(
     "/tickets/:ticketId/expenses/:expenseId/update",
     authMiddleware.isAuthenticated,

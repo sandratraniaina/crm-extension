@@ -1,8 +1,6 @@
 const customerBudgetService = require("../services/customerBudgetService");
 const financialSummaryService = require("../services/financialSummaryService");
-const leadExpenseService = require("../services/leadExpenseService");
 const ticketExpenseService = require("../services/ticketExpenseService");
-const authUtils = require("../utils/api");
 
 const dashboardController = {
     getDashboard: async (req, res) => {
@@ -17,12 +15,6 @@ const dashboardController = {
         }
     },
 
-    getLeadExpenses: async (req, res) => {
-        const expenses = await leadExpenseService.getLeadExpenses(req, res);
-
-        res.render("leadExpenses", { expenses: expenses });
-    },
-
     getTicketExpenses: async (req, res) => {
         const expenses = await ticketExpenseService.getTicketExpenses(req, res);
         
@@ -33,24 +25,6 @@ const dashboardController = {
         const response = await customerBudgetService.getCustomerBudgets(req, res)
 
         res.render("clientBudgets", { budgets: response });
-    },
-
-    updateLeadExpense: async (req, res) => {
-        const { leadId, expenseId } = req.params;
-        const { amount, description, expenseDate } = req.body;
-
-        await leadExpenseService.updateLeadExpense(req, res, {
-            leadId, expenseId, amount, description, expenseDate
-        });
-
-        res.redirect(`/leads/expenses${leadId ? `?leadId=${leadId}` : ""}`);
-    },
-    deleteLeadExpense: async (req, res) => {
-        const { leadId, expenseId } = req.params;
-        
-        await leadExpenseService.deleteLeadExpense(req, res, { leadId, expenseId });
-
-        res.redirect(`/leads/expenses${leadId ? `?leadId=${leadId}` : ""}`);
     },
 
     updateTicketExpense: async (req, res) => {
