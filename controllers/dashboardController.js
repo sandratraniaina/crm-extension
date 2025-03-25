@@ -1,3 +1,4 @@
+const customerBudgetService = require("../services/customerBudgetService");
 const financialSummaryService = require("../services/financialSummaryService");
 const leadExpenseService = require("../services/leadExpenseService");
 const ticketExpenseService = require("../services/ticketExpenseService");
@@ -29,11 +30,9 @@ const dashboardController = {
     },
 
     getClientBudgets: async (req, res) => {
-        const url = "/api/customers/budgets"
-        const response = await authUtils.authenticatedFetch(req, res, url);
-        if (!response) return;
+        const response = await customerBudgetService.getCustomerBudgets(req, res)
 
-        res.render("clientBudgets", { budgets: response.data });
+        res.render("clientBudgets", { budgets: response });
     },
 
     updateLeadExpense: async (req, res) => {
@@ -66,47 +65,11 @@ const dashboardController = {
     deleteTicketExpense: async (req, res) => {
         const { ticketId, expenseId } = req.params;
         await ticketExpenseService.deleteTicketExpense(req, res, { ticketId, expenseId });
-        
+
         res.redirect(
             `/tickets/expenses${ticketId ? `?ticketId=${ticketId}` : ""}`
         );
-    },
-
-    updateClientBudget: async (req, res) => {
-        const { clientId, budgetId } = req.params;
-        const { amount, description } = req.body;
-        const response = await authUtils.authenticatedFetch(
-            req,
-            res,
-            `/api/clients/${clientId}/budget/${budgetId}`,
-            {
-                method: "PUT",
-                body: JSON.stringify({
-                    amount: parseFloat(amount),
-                    description,
-                }),
-            }
-        );
-        if (!response) return;
-        res.redirect(
-            `/clients/budget${clientId ? `?clientId=${clientId}` : ""}`
-        );
-    },
-    deleteClientBudget: async (req, res) => {
-        const { clientId, budgetId } = req.params;
-        const response = await authUtils.authenticatedFetch(
-            req,
-            res,
-            `/api/clients/${clientId}/budget/${budgetId}`,
-            {
-                method: "DELETE",
-            }
-        );
-        if (!response) return;
-        res.redirect(
-            `/clients/budget${clientId ? `?clientId=${clientId}` : ""}`
-        );
-    },
+    }
 };
 
 module.exports = dashboardController;
