@@ -10,10 +10,12 @@ const authController = {
         const response = await authService.login(username, password);
 
         if (response.success) {
-            req.session.token = response.token;
+            req.session.user = response.data.userDetails;
+            req.session.token = response.data.token;
             return res.redirect("/");
         }
-        res.render("login", { error: "Invalid username or password" });
+
+        res.render("login", { error: response.message });
     },
 
     getDashboard: (req, res) => {
