@@ -12,7 +12,7 @@ const expenseThresholdController = {
             const thresholdData = await response;
             console.log(thresholdData);
             res.render("expenseThreshold", {
-                threshold: thresholdData.threshold.value,
+                threshold: thresholdData.data.threshold.value,
             });
         } catch (error) {
             console.error("Threshold error:", error);
