@@ -1,5 +1,6 @@
 const financialSummaryService = require("../services/financialSummaryService");
 const leadExpenseService = require("../services/leadExpenseService");
+const ticketExpenseService = require("../services/ticketExpenseService");
 const authUtils = require("../utils/api");
 
 const dashboardController = {
@@ -22,10 +23,9 @@ const dashboardController = {
     },
 
     getTicketExpenses: async (req, res) => {
-        const url = "/api/tickets/expenses";
-        const expenses = await authUtils.authenticatedFetch(req, res, url);
+        const expenses = await ticketExpenseService.getTicketExpenses(req, res);
         
-        res.render("ticketExpenses", { expenses: expenses.data });
+        res.render("ticketExpenses", { expenses: expenses });
     },
 
     getClientBudgets: async (req, res) => {
@@ -50,42 +50,23 @@ const dashboardController = {
         const { leadId, expenseId } = req.params;
         
         await leadExpenseService.deleteLeadExpense(req, res, { leadId, expenseId });
-        
+
         res.redirect(`/leads/expenses${leadId ? `?leadId=${leadId}` : ""}`);
     },
 
     updateTicketExpense: async (req, res) => {
         const { ticketId, expenseId } = req.params;
         const { amount, description, expenseDate } = req.body;
-        const response = await authUtils.authenticatedFetch(
-            req,
-            res,
-            `/api/tickets/${ticketId}/expenses/${expenseId}`,
-            {
-                method: "PUT",
-                body: JSON.stringify({
-                    amount: parseFloat(amount),
-                    description,
-                    expenseDate,
-                }),
-            }
-        );
-        if (!response) return;
+        await ticketExpenseService.updateTicketExpense(req, res, { ticketId, expenseId, amount, description, expenseDate });
+        
         res.redirect(
             `/tickets/expenses${ticketId ? `?ticketId=${ticketId}` : ""}`
         );
     },
     deleteTicketExpense: async (req, res) => {
         const { ticketId, expenseId } = req.params;
-        const response = await authUtils.authenticatedFetch(
-            req,
-            res,
-            `/api/tickets/${ticketId}/expenses/${expenseId}`,
-            {
-                method: "DELETE",
-            }
-        );
-        if (!response) return;
+        await ticketExpenseService.deleteTicketExpense(req, res, { ticketId, expenseId });
+        
         res.redirect(
             `/tickets/expenses${ticketId ? `?ticketId=${ticketId}` : ""}`
         );
