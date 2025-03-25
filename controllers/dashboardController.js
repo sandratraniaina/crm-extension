@@ -1,4 +1,5 @@
 const financialSummaryService = require("../services/financialSummaryService");
+const leadExpenseService = require("../services/leadExpenseService");
 const authUtils = require("../utils/api");
 
 const dashboardController = {
@@ -15,10 +16,9 @@ const dashboardController = {
     },
 
     getLeadExpenses: async (req, res) => {
-        const url = "/api/leads/expenses";
-        const expenses = await authUtils.authenticatedFetch(req, res, url);
-        
-        res.render("leadExpenses", { expenses: expenses.data });
+        const expenses = await leadExpenseService.getLeadExpenses(req, res);
+
+        res.render("leadExpenses", { expenses: expenses });
     },
 
     getTicketExpenses: async (req, res) => {
@@ -39,33 +39,18 @@ const dashboardController = {
     updateLeadExpense: async (req, res) => {
         const { leadId, expenseId } = req.params;
         const { amount, description, expenseDate } = req.body;
-        const response = await authUtils.authenticatedFetch(
-            req,
-            res,
-            `/api/leads/${leadId}/expenses/${expenseId}`,
-            {
-                method: "PUT",
-                body: JSON.stringify({
-                    amount: parseFloat(amount),
-                    description,
-                    expenseDate,
-                }),
-            }
-        );
-        if (!response) return;
+
+        await leadExpenseService.updateLeadExpense(req, res, {
+            leadId, expenseId, amount, description, expenseDate
+        });
+
         res.redirect(`/leads/expenses${leadId ? `?leadId=${leadId}` : ""}`);
     },
     deleteLeadExpense: async (req, res) => {
         const { leadId, expenseId } = req.params;
-        const response = await authUtils.authenticatedFetch(
-            req,
-            res,
-            `/api/leads/${leadId}/expenses/${expenseId}`,
-            {
-                method: "DELETE",
-            }
-        );
-        if (!response) return;
+        
+        await leadExpenseService.deleteLeadExpense(req, res, { leadId, expenseId });
+        
         res.redirect(`/leads/expenses${leadId ? `?leadId=${leadId}` : ""}`);
     },
 
