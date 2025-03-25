@@ -13,12 +13,6 @@ const dashboardController = {
             res.status(500).send("Internal Server Error");
         }
     },
-
-    getClientBudgets: async (req, res) => {
-        const response = await customerBudgetService.getCustomerBudgets(req, res)
-
-        res.render("clientBudgets", { budgets: response });
-    }
 };
 
 module.exports = dashboardController;

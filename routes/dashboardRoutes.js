@@ -10,10 +10,4 @@ router.get(
     dashboardController.getDashboard
 );
 
-router.get(
-    "/clients/budgets",
-    authMiddleware.isAuthenticated,
-    dashboardController.getClientBudgets
-);
-
 module.exports = router;
