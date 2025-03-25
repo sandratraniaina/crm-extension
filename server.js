@@ -6,6 +6,7 @@ const leadsRoutes = require("./routes/leadsRoutes");
 const ticketsRoutes = require("./routes/ticketsRoutes");
 const expenseThresholdRoutes = require("./routes/expenseThresholdRoutes");
 const leadExpenseRoutes = require("./routes/leadExpenseRoutes");
+const ticketExpenseRoutes = require("./routes/ticketExpenseRoutes");
 
 const app = express();
 const port = 3000;
@@ -28,6 +29,7 @@ app.use("/", leadsRoutes);
 app.use("/", ticketsRoutes);
 
 app.use("/leads", leadExpenseRoutes);
+app.use("/tickets", ticketExpenseRoutes);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
