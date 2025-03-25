@@ -1,18 +1,16 @@
+const expenseThresholdService = require("../services/expenseThresholdService");
 const authUtils = require("../utils/api");
 
 const expenseThresholdController = {
     getExpenseThreshold: async (req, res) => {
         try {
-            const response = await authUtils.authenticatedFetch(
+            const response = await expenseThresholdService.getExpenseThreshold(
                 req,
-                res,
-                "/api/expense-threshold"
+                res
             );
-            if (!response) return;
-            const thresholdData = await response;
-            console.log(thresholdData);
+
             res.render("expenseThreshold", {
-                threshold: thresholdData.threshold.value,
+                threshold: response.value,
             });
         } catch (error) {
             console.error("Threshold error:", error);
@@ -21,16 +19,11 @@ const expenseThresholdController = {
     },
     updateExpenseThreshold: async (req, res) => {
         const { value } = req.body;
-        const response = await authUtils.authenticatedFetch(
-            req,
-            res,
-            "/api/expense-threshold/update",
-            {
-                method: "POST",
-                body: JSON.stringify({ threshold: parseFloat(value / 100) }),
-            }
-        );
-        if (!response) return;
+
+        await expenseThresholdService.updateExpenseThreshold(req, res, {
+            value,
+        });
+
         res.redirect("/expense-threshold");
     },
 };

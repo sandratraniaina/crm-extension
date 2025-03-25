@@ -24,12 +24,8 @@ const authUtils = {
             }
 
             const jsonResponse = await response.json();
-
-            if (!jsonResponse.success) {
-                throw new Error(jsonResponse.message || "API request failed");
-            }
-
-            return jsonResponse.data !== undefined ? jsonResponse.data : true;
+            
+            return jsonResponse;
         } catch (error) {
             console.error("API fetch error:", error.message);
             res.status(500).send(`API Error: ${error.message}`);
