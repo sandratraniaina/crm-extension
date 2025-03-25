@@ -48,15 +48,5 @@ router.post(
     authMiddleware.isAuthenticated,
     dashboardController.deleteTicketExpense
 );
-router.post(
-    "/clients/:clientId/budget/:budgetId/update",
-    authMiddleware.isAuthenticated,
-    dashboardController.updateClientBudget
-);
-router.post(
-    "/clients/:clientId/budget/:budgetId/delete",
-    authMiddleware.isAuthenticated,
-    dashboardController.deleteClientBudget
-);
 
 module.exports = router;
