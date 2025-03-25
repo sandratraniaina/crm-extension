@@ -7,7 +7,16 @@ const financialSummaryService = {
             res,
             "/api/summary/financial-summary"
         );
-        console.log(results);
+
+        return results.data;
+    },
+
+    getCustomerFinancialSummaries: async (req, res) => {
+        const results = await authUtils.authenticatedFetch(
+            req, 
+            res,
+            "/api/summary/customer-financial-summary"
+        );
 
         return results.data;
     }
