@@ -8,13 +8,14 @@ const dashboardController = {
                 res,
                 "/api/summary/financial-summary"
             );
+
             const summaries = await authUtils.authenticatedFetch(
                 req, 
                 res,
                 "/api/summary/customer-financial-summary"
-            )
+            );
 
-            res.render("dashboard", { financialSummary, summaries });
+            res.render("dashboard", { financialSummary: financialSummary.data, summaries: summaries.data });
         } catch (error) {
             console.error("Dashboard error:", error);
             res.status(500).send("Internal Server Error");
@@ -25,14 +26,14 @@ const dashboardController = {
         const url = "/api/leads/expenses";
         const expenses = await authUtils.authenticatedFetch(req, res, url);
         
-        res.render("leadExpenses", { expenses });
+        res.render("leadExpenses", { expenses: expenses.data });
     },
 
     getTicketExpenses: async (req, res) => {
         const url = "/api/tickets/expenses";
         const expenses = await authUtils.authenticatedFetch(req, res, url);
         
-        res.render("ticketExpenses", { expenses });
+        res.render("ticketExpenses", { expenses: expenses.data });
     },
 
     getClientBudgets: async (req, res) => {
@@ -40,7 +41,7 @@ const dashboardController = {
         const response = await authUtils.authenticatedFetch(req, res, url);
         if (!response) return;
 
-        res.render("clientBudgets", { "budgets": response });
+        res.render("clientBudgets", { budgets: response.data });
     },
 
     updateLeadExpense: async (req, res) => {

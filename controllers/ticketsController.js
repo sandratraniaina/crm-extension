@@ -9,7 +9,7 @@ const ticketsController = {
                 "/api/tickets"
             );
             if (!response) return;
-            res.render("allTickets", { tickets: response });
+            res.render("allTickets", { tickets: response.data });
         } catch (error) {
             console.error("Tickets fetch error:", error);
             res.status(500).send("Internal Server Error");

@@ -9,7 +9,7 @@ const leadsController = {
                 "/api/leads"
             );
             if (!response) return;
-            res.render("allLeads", { leads: response });
+            res.render("allLeads", { leads: response.data });
         } catch (error) {
             console.error("Leads fetch error:", error);
             res.status(500).send("Internal Server Error");
