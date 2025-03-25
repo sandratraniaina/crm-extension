@@ -15,8 +15,10 @@ require("dotenv").config();
 const app = express();
 const port = 3000;
 
+app.use(express.static('public'));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+
 app.use(
     session({
         secret: process.env.SESSION_SECRET_KEY,
@@ -29,7 +31,6 @@ app.use(
         },
     })
 );
-
 app.use((req, res, next) => {
     res.locals.session = req.session; // Make session data available in EJS
     next();
