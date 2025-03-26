@@ -7,6 +7,7 @@
     <title>CRM Extension - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/color.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
@@ -88,13 +89,15 @@
     <script>
         const labels = <%- JSON.stringify(summaries.map(summary => summary.customer.name)) %>;
 
+        const color = generateRandomColor(labels.length);
+
         const leadData = <%- JSON.stringify(summaries.map(summary => summary.totalLeadExpense)) %>;
         const leadCtx = document.getElementById('leadExpensesChart').getContext('2d');
         new Chart(leadCtx, {
             type: 'pie',
             data: {
                 labels: labels,
-                datasets: [{ label: 'Lead Expenses ($)', data: leadData, backgroundColor: 'rgba(37, 99, 235, 0.6)', borderColor: 'rgba(37, 99, 235, 1)', borderWidth: 1 }]
+                datasets: [{ label: 'Lead Expenses ($)', data: leadData, backgroundColor: color }]
             },
             options: { scales: { y: { beginAtZero: true } } }
         });
@@ -105,7 +108,7 @@
             type: 'pie',
             data: {
                 labels: labels,
-                datasets: [{ label: 'Ticket Expenses ($)', data: ticketData, backgroundColor: 'rgba(75, 192, 192, 0.6)', borderColor: 'rgba(75, 192, 192, 1)', borderWidth: 1 }]
+                datasets: [{ label: 'Ticket Expenses ($)', data: ticketData, backgroundColor: color }]
             },
             options: { scales: { y: { beginAtZero: true } } }
         });
@@ -116,7 +119,7 @@
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{ label: 'Client Budget ($)', data: clientBudgetData, backgroundColor: 'rgba(255, 159, 64, 0.6)', borderColor: 'rgba(255, 159, 64, 1)', borderWidth: 1 }]
+                datasets: [{ label: 'Client Budget ($)', data: clientBudgetData, backgroundColor: color }]
             },
             options: { scales: { y: { beginAtZero: true } } }
         });
