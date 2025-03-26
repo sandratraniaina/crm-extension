@@ -22,7 +22,7 @@
                 <form action="/expense-threshold" method="POST" class="space-y-4">
                     <div>
                         <label for="value" class="block text-sm font-medium text-gray-600 mb-1">New Threshold (%)</label>
-                        <input type="number" step="0.01" id="value" name="value" value="<%= threshold * 100 %>"
+                        <input type="number" step="0.01" id="value" name="value" value="<%= threshold * 100 %>" min="0" max="100"
                             class="w-full p-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                             required>
                     </div>

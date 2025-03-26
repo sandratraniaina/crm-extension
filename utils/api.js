@@ -12,18 +12,18 @@ const authUtils = {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
         };
-
+        
         try {
             const response = await fetch(fullUrl, {
                 ...options,
                 headers,
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
             const jsonResponse = await response.json();
+
+            if (!jsonResponse.success) {
+                throw new Error(`HTTP error! status: ${jsonResponse.status}, error: ${jsonResponse.message}`);
+            }
             
             return jsonResponse;
         } catch (error) {

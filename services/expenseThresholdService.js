@@ -17,15 +17,17 @@ const expenseThresholdService = {
 
     updateExpenseThreshold: async (req, res, data) => {
         const { value } = data;
-        await authUtils.authenticatedFetch(
+        const response = await authUtils.authenticatedFetch(
             req,
             res,
             "/api/expense-threshold/update",
             {
                 method: "POST",
-                body: JSON.stringify({ threshold: parseFloat(value / 100) }),
+                body: JSON.stringify({ threshold: parseFloat(value) / 100 }),
             }
         );
+        
+        return response;
     },
 };
 

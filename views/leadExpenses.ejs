@@ -22,7 +22,7 @@
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-200">
                             <th class="p-3 text-left text-sm font-medium text-gray-600">ID</th>
-                            <th class="p-3 text-left text-sm font-medium text-gray-600">Amount ($)</th>
+                            <th class="p-3 text-left text-sm font-medium text-gray-600">Amount (Ar)</th>
                             <th class="p-3 text-left text-sm font-medium text-gray-600">Description</th>
                             <th class="p-3 text-left text-sm font-medium text-gray-600">Date</th>
                             <th class="p-3 text-left text-sm font-medium text-gray-600">Name</th>
@@ -51,8 +51,8 @@
                                     <form action="/leads/<%= exp.lead.leadId %>/expenses/<%= exp.id %>/update"
                                         method="POST" class="space-y-4">
                                         <div>
-                                            <label for="amount-<%= exp.id %>" class="block text-sm text-gray-600">Amount ($)</label>
-                                            <input type="number" step="0.01" id="amount-<%= exp.id %>" name="amount"
+                                            <label for="amount-<%= exp.id %>" class="block text-sm text-gray-600">Amount (Ar)</label>
+                                            <input type="number" step="0.01" id="amount-<%= exp.id %>" name="amount" min="0"
                                                 value="<%= exp.amount %>" class="w-full p-2 border border-gray-200 rounded-lg text-sm"
                                                 required>
                                         </div>
