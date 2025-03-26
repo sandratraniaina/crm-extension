@@ -12,7 +12,7 @@ const authUtils = {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
         };
-
+        
         try {
             const response = await fetch(fullUrl, {
                 ...options,

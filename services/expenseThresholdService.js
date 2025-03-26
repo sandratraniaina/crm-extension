@@ -23,7 +23,7 @@ const expenseThresholdService = {
             "/api/expense-threshold/update",
             {
                 method: "POST",
-                body: JSON.stringify({ threshold: parseFloat(value / 100) }),
+                body: JSON.stringify({ threshold: parseFloat(value) / 100 }),
             }
         );
     },
