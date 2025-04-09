@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Extension - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/color.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50 min-h-screen flex">
+    <%- include('partials/sidebar') %>
+
+    <div class="flex-1 flex flex-col">
+        <%- include('partials/header') %>
+
+        <main class="flex-1 p-6 ml-64">
+            <h1 class="text-2xl font-semibold text-gray-900 mb-6">Dashboard</h1>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <!-- Total Customer Budget -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                    <h2 class="text-sm font-medium text-gray-600">Total Customer Budget</h2>
+                    <p class="text-xl font-bold text-gray-900 mt-1">Ar<%= financialSummary.totalBudget %></p>
+                    <a href="/customers/budgets" class="mt-2 inline-block text-blue-500 hover:text-blue-700 text-sm">See Details</a>
+                </div>
+                <!-- Total Ticket Expense Budget -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                    <h2 class="text-sm font-medium text-gray-600">Total Ticket Expenses</h2>
+                    <p class="text-xl font-bold text-gray-900 mt-1">Ar<%= financialSummary.ticketExpenses %></p>
+                    <a href="/tickets/expenses" class="mt-2 inline-block text-blue-500 hover:text-blue-700 text-sm">See Details</a>
+                </div>
+                <!-- Total Lead Expense Budget -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                    <h2 class="text-sm font-medium text-gray-600">Total Lead Expenses</h2>
+                    <p class="text-xl font-bold text-gray-900 mt-1">Ar<%= financialSummary.leadExpenses %></p>
+                    <a href="/leads/expenses" class="mt-2 inline-block text-blue-500 hover:text-blue-700 text-sm">See Details</a>
+                </div>
+            </div>
+
+            <a href="/expense-threshold" class="text-blue-500 hover:text-blue-700 text-sm mb-6 inline-block">Manage Expense Threshold</a>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Lead Expenses -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h2 class="text-lg font-medium text-gray-900 mb-4">Lead Expenses</h2>
+                    <canvas id="leadExpensesChart" width="400" height="200"></canvas>
+                    <div class="mt-4 space-y-1">
+                        <% summaries.forEach(summary => { %>
+                            <a class="text-blue-500 hover:text-blue-700 text-sm block">
+                                <%= summary.customer.name %>: Ar<%= summary.totalLeadExpense %>
+                            </a>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <!-- Ticket Expenses -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h2 class="text-lg font-medium text-gray-900 mb-4">Ticket Expenses</h2>
+                    <canvas id="ticketExpensesChart" width="400" height="200"></canvas>
+                    <div class="mt-4 space-y-1">
+                        <% summaries.forEach(summary => { %>
+                            <a class="text-blue-500 hover:text-blue-700 text-sm block">
+                                <%= summary.customer.name %>: Ar<%= summary.totalTicketExpense %>
+                            </a>
+                        <% }) %>
+                    </div>
+                </div>
+
+                <!-- Client Budget -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 lg:col-span-2">
+                    <h2 class="text-lg font-medium text-gray-900 mb-4">Client Budget</h2>
+                    <canvas id="clientBudgetChart" width="400" height="200"></canvas>
+                    <div class="mt-4 space-y-1">
+                        <% summaries.forEach(summary => { %>
+                            <a class="text-blue-500 hover:text-blue-700 text-sm block">
+                                <%= summary.customer.name %>: Ar<%= summary.totalBudget %>
+                            </a>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const labels = <%- JSON.stringify(summaries.map(summary => summary.customer.name)) %>;
+
+        const color = generateRandomColor(labels.length);
+
+        const leadData = <%- JSON.stringify(summaries.map(summary => summary.totalLeadExpense)) %>;
+        const leadCtx = document.getElementById('leadExpensesChart').getContext('2d');
+        new Chart(leadCtx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{ label: 'Lead Expenses (Ar)', data: leadData, backgroundColor: color }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+
+        const ticketData = <%- JSON.stringify(summaries.map(summary => summary.totalTicketExpense)) %>;
+        const ticketCtx = document.getElementById('ticketExpensesChart').getContext('2d');
+        new Chart(ticketCtx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{ label: 'Ticket Expenses (Ar)', data: ticketData, backgroundColor: color }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+
+        const clientBudgetData = <%- JSON.stringify(summaries.map(summary => summary.totalBudget)) %>;
+        const clientCtx = document.getElementById('clientBudgetChart').getContext('2d');
+        new Chart(clientCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{ label: 'Client Budget (Ar)', data: clientBudgetData, backgroundColor: color }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+    </script>
+</body>
+
+</html>
