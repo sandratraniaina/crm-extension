@@ -9,6 +9,7 @@ const expenseThresholdRoutes = require("./routes/expenseThresholdRoutes");
 const leadExpenseRoutes = require("./routes/leadExpenseRoutes");
 const ticketExpenseRoutes = require("./routes/ticketExpenseRoutes");
 const customerBudgetRoutes = require("./routes/customerBudgetRoutes");
+const csvRoutes = require("./routes/csvRoutes");
 
 require("dotenv").config();
 
@@ -38,6 +39,8 @@ app.use((req, res, next) => {
 
 app.use("/", authRoutes);
 app.use("/", dashboardRoutes);
+
+app.use("/csv", csvRoutes);
 
 app.use("/customers", customerBudgetRoutes);
 
